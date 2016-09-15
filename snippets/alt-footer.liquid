@@ -1,0 +1,80 @@
+<!-- Footer
+============================================= -->
+{% assign footerModules = 1 %}
+
+{% if settings.footer-secondary-menu != blank %}
+  {% assign footerModules = footerModules | plus: 1 %}
+{% endif %}
+
+{% if settings.footer-message != blank or settings.show-mailing-list and settings.mailchimp-action-url != blank %}
+  {% assign footerModules = footerModules | plus: 1 %}
+{% endif %}
+
+<footer class="main-footer main-footer-alt content-area" id="main-footer">
+
+  <!-- Connect with us
+  ++++++++++++++++++++++++++++ -->
+  <ul class="connect clearfix module-count-{{ footerModules }}">
+    {% if settings.show-mailing-list and settings.mailchimp-action-url != blank %}
+      <li class="first newsletter">
+        {% if settings.footer-message != blank %}
+          <div class="footer-message">{{ settings.footer-message }}</div>
+        {% endif %}
+        <form action="{{ settings.mailchimp-action-url }}" method="post" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+          <div class="wrap">
+            <input class="email" name="EMAIL" type="email" placeholder="{{ 'layout.footer.email' | t }}" value="">
+            <input class="submit" name="subscribe" type="submit" value="{{ 'general.submit' | t }}">
+          </div>
+        </form>
+      </li>
+    {% elsif settings.footer-message != blank %}
+      <li class="first newsletter">
+        <div class="footer-message">{{ settings.footer-message }}</div>
+      </li>
+    {% endif %}
+
+    <li class="footer-menu">
+      <ul class="footer-linklist-one">
+        {% for link in linklists.footer.links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </li>
+
+    {% if settings.footer-secondary-menu != "" %}
+      <li class="footer-menu">
+        <ul class="footer-linklist-one">
+          {% for link in linklists[settings.footer-secondary-menu].links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+
+  </ul>
+
+  <!-- Sub-footer
+  ++++++++++++++++++++++++++++ -->
+  <div class="sub-footer">
+
+    {% unless settings.twitter-url.size == 0 and settings.facebook-url.size == 0 and settings.pinterest-url.size == 0 and settings.google-plus-url.size == 0 and settings.instagram-url.size == 0 and settings.tumblr-url.size == 0 and settings.youtube-url.size == 0 and settings.vimeo-url.size == 0 %}
+      <nav class="social">
+        {% include 'social-links' %}
+      </nav>
+    {% endunless %}
+
+    <p><a href="http://www.pixelunion.net/themes/shopify/atlantic">Atlantic Theme</a> by <a href="http://www.pixelunion.net">Pixel Union</a>. {{ powered_by_link }}.</p>
+
+    {% if shop.enabled_payment_types.size > 0 and settings.footer-payment-options %}
+      {% include 'icon-sprite.svg' %}
+      <ul class="payment-options">
+        {% for type in shop.enabled_payment_types %}
+          <li class="{{ type | replace: '_','-' }}">
+            <svg><use xlink:href="#payment-{{ type }}"/></svg>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+</footer>
